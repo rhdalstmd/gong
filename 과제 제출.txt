@@ -1,0 +1,200 @@
+52p
+public class MyInfo {                                               // MyInfo 클래스 정의 시작
+    public static void main(String[] args) {                        // main() 메소드 정의 시작
+        // 자기소개 출력
+        System.out.println("Kitae Hwang");                          // System.out.println() 메소드 호출하여 문자열 "Kitae Hwang" 출력, 이름 출력
+        System.out.println("20 years old");                         // System.out.println() 메소드 호출하여 문자열 "20 years old" 출력, 나이 출력
+        System.out.println("Department of Computer Engineering");   // System.out.println() 메소드 호출하여 문자열 "Department of Computer Engineering" 출력, 학과 출력
+    }                                                               // main() 메소드 정의 끝
+}   
+----------------------------------------------------------------------------------------
+55p 1
+public class Welcome {                                           // Welcome 클래스 정의 시작
+    public static void main(String[] args) {                     // main() 메소드 정의 시작
+        // 환영 메세지 출력
+        System.out.println("Welcome!!");                         // System.out.println() 메소드 호출하여 문자열 "Welcome!!" 출력
+        System.out.println("자바 세계로 오신 것을 환영합니다."); // System.out.println() 메소드 호출하여 문자열 "자바 세계로 오신 것을 환영합니다." 출력
+    }                                                           // main() 메소드 정의 끝
+}                                                               // Welcome 클래스 정의 끝
+------------------------------------------------------------------------------------------------
+55p 2
+public class Sorry {                                  // Sorry 클래스 정의 시작
+    public static void main(String[] args) {          // main() 메소드 정의 시작
+        // 사과 메세지 출력
+        System.out.println("Sorry!!");                // System.out.println() 메소드 호출하여 문자열 "Sorry!!" 출력
+        System.out.println("재밌어서 미안합니다~~");   // System.out.println() 메소드 호출하여 문자열 "재밌어서 미안합니다~~" 출력
+    }                                                 // main() 메소드 정의 끝
+}                                                     // Sorry 클래스 정의 끝
+-----------------------------------------------------------------------------------
+110p 1
+import java.util.Scanner;                                               // Scanner 클래스 사용하기위해 컴파일러에게 경로명 알려줌
+ 
+public class Ch2_1 {                                                    // Ch2_1 클래스 정의 시작
+    public static void main(String[] args) {                            // main() 메소드 정의 시작
+        Scanner scanner = new Scanner(System.in);                       // Scanner 클래스형 레퍼런스 변수 scanner 선언 동시에 Scanner 객체 생성하여 대입하여 초기화
+        // 상수
+        final double Exchange_Rate = 1100;                              // double형 상수 Exchange_Rate 선언 동시에 1100 대입하여 초기화, 환율
+        // 변수
+        int won;                                                        // int형 변수 won 선언, 원화
+        double dollar;                                                  // double형 변수 dollar 선언, 달러화
+ 
+        // 로직
+        // 1. 원화 입력
+        System.out.print("원화를 입력하세요(단위 원)>>");                // System.out.println() 메소드 호출하여 문자열 "원화를 입력하세요(단위 원)>>" 출력, 원화 입력 안내 메세지 출력
+        won = scanner.nextInt();                                        // 변수 won에 scanner 객체의 nextInt() 메소드 호출하여 사용자로부터 입력 받은 값을 리턴 받아 대입하여 초기화, 원화 저장
+ 
+        // 2. 달러 변환
+        dollar = won/Exchange_Rate;                                     // 변수 dollar에 won/Exchange_Rate 연산 결과 리턴 받아 대입, 원화를 달러화로 변환하여 저장
+ 
+        // 3. 결과 출력
+        System.out.println(won + "원은 $" + dollar + "입니다.");        // System.out.println() 메소드 호출하여 원화를 달러화로 변환한 결과 안내 메세지 출력
+ 
+        scanner.close();                                                // scanner 객체의 close() 메소드 호출하여 객체 닫기, 즉 사용 종료
+    }                                                                   // main() 메소드 정의 끝
+}                                                                       // Ch2_1 클래스 정의 끝
+--------------------------------------------------------------------------------------------------------
+110p 2
+import java.util.Scanner;                                                   // Scanner 클래스 사용하기위해 컴파일러에게 경로명 알려줌
+ 
+public class Ch2_2 {                                                        // Ch2_2 클래스 정의 시작
+    public static void main(String[] args) {                                // main() 메소드 정의 시작
+        Scanner scanner = new Scanner(System.in);                           // Scanner 클래스형 레퍼런스 변수 scanner 선언 동시에 Scanner 객체 생성하여 대입하여 초기화
+        // 변수
+        int number, one, ten;                                               // int형 변수 number, one, ten 선언, 즉 2자리수 정수, 일의 자리수, 십의 자리수
+        boolean result = false;                                             // boolean형 변수 result 선언 동시에 false 대입하여 초기화, 즉 일의 자리수와 십의 자리수 비교 결과
+ 
+        // 로직
+        // 1. 2자리수 정수 입력
+        System.out.print("2자리수 정수 입력(10~99)>>");                      // System.out.println() 메소드 호출하여 문자열 "2자리수 정수 입력(10~99)>>" 출력, 2자리수 정수 입력 안내 메세지 출력
+        number = scanner.nextInt();                                         // 변수 number에 scanner 객체의 nextInt() 메소드 호출하여 사용자로부터 입력 받은 값을 정수로 리턴 받아 대입하여 초기화, 즉 2자리수 정수 입력
+        // 2. 십의 자리수와 일의 자리수 추출
+        ten = number / 10;                                                  // 변수 ten에 number / 10 연산 결과 리턴 받아 대입, 즉 십의 자리수
+        one = number % 10;                                                  // 변수 one에 number % 10 연산 결과 리턴 받아 대입, 즉 일의 자리수
+        // 3. 동일비교
+        if(ten == one)                                                      // 만약 ten과 one에 저장된 값이 같으면, 즉 사용자로부터 입력 받은 2자리수 정수의 십의 자리수와 일의 자리수가 같으면
+            result = true;                                                  // 변수 result에 true 대입하여 저장, 즉 비교 결과 같음
+        else                                                                // 그렇지 않으면, 즉 사용자로부터 입력 받은 2자리수 정수의 십의 자리수와 일의 자리수가 다르면
+            result = false;                                                 // 변수 result에 false 대입하여 저장, 즉 비교 결과 다름
+        // 4. 결과 출력
+        System.out.println(result ? "Yes! 10의 자리와 1의 자리가 같습니다."  // System.out.println() 메소드 호출하여 비교 결과 출력,
+                                    : "No! 10의 자리와 1의 자리가 다릅니다.");// 변수 result에 저장된 값이 true이면 문자열 "Yes! 10의 자리와 1의 자리가 같습니다." 출력
+                                                                            // 변수 result에 저장된 값이 tfalse이면 문자열 "No! 10의 자리와 1의 자리가 다릅니다." 출력
+        scanner.close();                                                    // scanner 객체의 close() 메소드 호출하여 객체 닫기, 즉 사용 종료
+    }                                                                       // main() 메소드 정의 끝
+}                                                                           // Ch2_2 클래스 정의 끝
+
+Colored by Color Scripter
+
+cs
+
+----------------------------------------------------------------------------------------------------------------
+110p 3
+import java.util.Scanner;                                                                   // 다른 패키지의 클래스 사용하기위해 컴파일러에게 경로명 알려줌
+ 
+public class Ch2_3 {                                                                        // Ch2_3 클래스 정의 시작
+    public static void main(String[] args) {                                                // main() 메소드 정의 시작
+        Scanner scanner = new Scanner(System.in);                                           // Scanner 클래스형 변수 scanner 선언 동시에 Scanner 객체 생성하여 대입하여 초기화, 사용자로부터 입력 받기 위해 Scanner 사용
+ 
+        // 변수 및 상수 선언
+        int money, remain;                                                                  // int형 변수 money, remain 선언, 사용자가 입력한 돈, 나머지 돈
+        int manwon5, manwon1, cheonwon1, baekwon5, baekwon1, sibwon5, sibwon1, illwon1;     // int형 변수 manwon5, manwon1, cheonwon1, baekwon5, baekwon1, sibwon5, sibwon1, illwon 선언, 지폐 개수
+ 
+        // 로직
+        // 1. 변환할 돈 입력
+        System.out.print("금액을 입력하시오>>");                                             // System.out.print() 메소드 호출하여 문자열 "금액을 입력하시오>>" 출력, 금액 입력 안내 메세지 출력
+        money = scanner.nextInt();                                                          // 변수 money에 scanner 객체의 nextInt() 메소드 호출하여 사용자로부터 입력 받은 값 int형으로 리턴 받아 대입하여 초기화, 사용자가 입력한 돈
+ 
+        // 2. 각 지폐 단위로 나누기, 지폐 개수
+        // 3. 각 지폐 단위로 나머지 연산, 남은 돈
+        manwon5 = money / 50_000;                                                           // 변수 manwon5에 money / 50_000 연산 결과 리턴 받아 대입하여 초기화, 오만원권 개수
+        remain = money % 50_000;                                                            // 변수 remain에 money % 50_000 연산 결과 리턴 받아 대입하여 초기화, 오만원권으로 변환하고 남은 돈
+        manwon1 = remain / 10_000;                                                          // 변수 manwon1에 remain / 10_000 연산 결과 리턴 받아 대입하여 초기화, 만원권 개수
+        remain = remain % 10_000;                                                           // 변수 remain에 remain % 10_000 연산 결과 리턴 받아 대입하여 초기화, 만원권으로 변환하고 남은 돈
+        cheonwon1 = remain / 1_000;                                                         // 변수 cheonwon1에 remain % 1_000 연산 결과 리턴 받아 대입하여 초기화, 천원권 개수
+        remain = remain % 1_000;                                                            // 변수 remain에 remain % 1_000 연산 결과 리턴 받아 대입하여 초기화, 천원권으로 변환하고 남은 돈
+        baekwon5 = remain / 500;                                                            // 변수 baekwon5에 remain / 500 연산 결과 리턴 받아 대입하여 초기화, 오백원 개수
+        remain = remain % 500;                                                              // 변수 remain에 remain % 500 연산 결과 리턴 받아 대입하여 초기화, 오백원으로 변환하고 남은 돈
+        baekwon1 = remain / 100;                                                            // 변수 baekwon1에 remain / 100 연산 결과 리턴 받아 대입하여 초기화, 백원 개수
+        remain = remain % 100;                                                              // 변수 remain에 remain % 100 연산 결과 리턴 받아 대입하여 초기화, 백원으로 변환하고 남은 돈
+        sibwon5 = remain / 50;                                                              // 변수 sibwon5에 remain / 50 연산 결과 리턴 받아 대입하여 초기화, 오십원 개수
+        remain = remain % 50;                                                               // 변수 remain에 remain % 50 연산 결과 리턴 받아 대입하여 초기화, 오십원으로 변환하고 남은 돈
+        sibwon1 = remain / 10;                                                              // 변수 sibwon1에 remain / 10 연산 결과 리턴 받아 대입하여 초기화, 십원 개수
+        remain = remain % 10;                                                               // 변수 remain에 remain % 10 연산 결과 리턴 받아 대입하여 초기화, 십원으로 변환하고 남은 돈
+        illwon1 = remain;                                                                   // 변수 illwon1에 remain 대입하여 초기화, 일원 개수
+ 
+        // 4. 변환한 결과 출력, 개수가 0개이면 출력 X
+        if (manwon5 != 0) {                                                                 // 변수 manwon5에 저장된 값이 0이 아니면, 즉 오만원권 개수가 0개 아니면
+            System.out.println("오만원권 " + manwon5 + "매");                               // System.out.println() 메소드 호출하여 문자열 "오만원권 " + manwon5 + "매" 출력, 오만원권 개수 출력
+        }
+        if (manwon1 != 0) {                                                                 // 변수 manwon1에 저장된 값이 0이 아니면, 즉 만원권 개수가 0개 아니면
+            System.out.println("만원권 " + manwon1 + "매");                                 // System.out.println() 메소드 호출하여 문자열 "만원권 " + manwon1 + "매" 출력, 만원권 개수 출력
+        }
+        if (cheonwon1 != 0) {                                                               // 변수 cheonwon1에 저장된 값이 0이 아니면, 즉 천원권 개수가 0개 아니면
+            System.out.println("천원권 " + cheonwon1 + "매");                               // System.out.println() 메소드 호출하여 문자열 "천원권 " + cheonwon1 + "매" 출력, 천원권 개수 출력
+        }
+        if (baekwon5 != 0) {                                                                // 변수 baekwon5에 저장된 값이 0이 아니면, 즉 오백원 개수가 0개 아니면
+            System.out.println("오백원 " + baekwon5 + "개");                                // System.out.println() 메소드 호출하여 문자열 "오백원 " + baekwon5 + "개" 출력, 오백원 개수 출력
+        }
+        if (baekwon1 != 0) {                                                                // 변수 baekwon1에 저장된 값이 0이 아니면, 즉 백원 개수가 0개 아니면
+            System.out.println("백원 " + baekwon1 + "개");                                  // System.out.println() 메소드 호출하여 문자열 "백원 " + baekwon1 + "개" 출력, 백원 개수 출력
+        }
+        if (sibwon5 != 0) {                                                                 // 변수 sibwon5에 저장된 값이 0이 아니면, 즉 오십원 개수가 0개 아니면
+            System.out.println("오십원 " + sibwon5 + "개");                                 // System.out.println() 메소드 호출하여 문자열 "오십원 " + sibwon5 + "개" 출력, 오십원 개수 출력
+        }
+        if (sibwon1 != 0) {                                                                 // 변수 sibwon1에 저장된 값이 0이 아니면, 즉 십원 개수가 0개 아니면
+            System.out.println("십원 " + sibwon1 + "개");                                   // System.out.println() 메소드 호출하여 문자열 "십원 " + sibwon1 + "개" 출력, 십원 개수 출력
+        }
+        if (illwon1 != 0) {                                                                 // 변수 illwon1에 저장된 값이 0이 아니면, 즉 일원 개수가 0개 아니면
+            System.out.println("일원 " + illwon1 + "개");                                   // System.out.println() 메소드 호출하여 문자열 "일원 " + illwon1 + "개" 출력, 일원 개수 출력
+        }
+ 
+        scanner.close();                                                                    // scanner 객체의 close() 메소드 호출하여 객체 닫기, 사용종료
+    }                                                                                       // main() 메소드 정의 끝
+}                                                               
+------------------------------------------------------------------------------------------------------------------
+110p 4
+import java.util.Scanner;                                                       // 다른 패키지의 클래스 사용하기위해 컴파일러에게 경로명 알려줌
+ 
+public class Ch2_4 {                                                            // Ch2_4 클래스 정의 시작
+    public static void main(String[] args) {                                    // main() 메소드 정의 시작
+        Scanner scanner = new Scanner(System.in);                               // Scanner 클래스형 변수 scanner 선언 동시에 Scanner 객체 생성하여 대입하여 초기화, 사용자로부터 입력 받기 위해 Scanner 사용
+ 
+        // 변수 및 상수 선언
+        int a, b, c;                                                            // int형 변수 a, b, c 선언, 정수 3개
+        int median;                                                             // int형 변수 median 선언, 중간값
+ 
+        // 로직
+        // 1. 정수 3개 입력
+        System.out.print("정수 3개 입력>>");                                    // System.out.print() 메소드 호출하여 문자열 "정수 3개 입력>>" 출력, 정수 3개 입력 안내 메세지 출력
+        a = scanner.nextInt();                                                  // 변수 a에 scanner 객체의 nextInt() 메소드 호출하여 사용자로부터 입력 받은 값 리턴 받아 대입하여 초기화, 사용자가 입력한 정수
+        b = scanner.nextInt();                                                  // 변수 b에 scanner 객체의 nextInt() 메소드 호출하여 사용자로부터 입력 받은 값 리턴 받아 대입하여 초기화, 사용자가 입력한 정수
+        c = scanner.nextInt();                                                  // 변수 c에 scanner 객체의 nextInt() 메소드 호출하여 사용자로부터 입력 받은 값 리턴 받아 대입하여 초기화, 사용자가 입력한 정수
+ 
+        // 2. 중간값 판별
+        // 3. 결과 출력
+        // a가 중간값인 경우
+        if (((b <= a) && (a <= c)) || ((c <= a) && (a <= b))) {                 // 만약 b가 a보다 작거나 같고 a가 c보다 작거나 같거나, c가 a보다 작거나 같고 a가 b보다 작거나 같으면
+            median = a;                                                         // median에 a 대입하여 초기화, 중간값은 a
+        }
+        // b가 중간값인 경우
+        else if (((a <= b) && (b <= c)) || ((c <= b) && (b <= a))) {            // 그렇지 않고 만약 a가 b보다 작거나 같고 b가 c보다 작거나 같거나, c가 b보다 작거나 같고 b가 a보다 작거나 같으면
+            median = b;                                                         // median에 b 대입하여 초기화, 중간값은 b
+        }
+        // c가 중간값인 경우
+        else {                                                                  // 그렇지 않으면
+            median = c;                                                         // median에 c 대입하여 초기화, 중간값은 c
+        }
+ 
+        System.out.println("중간값은 " + median);                               // System.out.println() 메소드 호출하여 문자열 "중간값은 " + median 출력, 중간값 출력 안내 메세지 출력
+ 
+        scanner.close();                                                        // scanner 객체의 close() 메소드 호출하여 객체 닫기, 사용종료
+    }                                                                           // main() 메소드 정의 끝
+}                                                                               // Ch2_4 클래스 정의 끝
+
+Colored by Color Scripter
+
+cs
+
+
+
+
