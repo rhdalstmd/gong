@@ -1,0 +1,914 @@
+import java.util.Scanner;
+import java.util.Vector;
+
+public class IntegerVector {
+	private Vector<Integer> v = new Vector<Integer>();
+
+	public IntegerVector() { }
+	private void read() {
+		Scanner scanner = new Scanner(System.in);
+
+		System.out.print("정수 입력(-1이면 입력 끝)>>");
+		while(true) {
+			int n = scanner.nextInt();
+			if(n == -1)
+				break;
+			v.add(n);
+		}
+		scanner.close();
+	}
+	
+	private int findLeastNumber() {
+		int least = v.get(0); // 0번째 항목을 현재 제일 작은 수로 설정
+		for(int i=0; i<v.size(); i++) {
+			if(least > v.get(i))
+				least = v.get(i);
+		}
+		return least;
+	}
+	
+	public void run() {
+		read(); // -1 앞까지 정수들을 벡터에 읽어들이기
+		int least = findLeastNumber();
+		System.out.println("제일 작은 수는 " + least);
+	}
+	
+	public static void main(String[] args) {
+		IntegerVector app = new IntegerVector();
+		app.run();
+	}
+
+}
+--------------------------------------------------------------------------
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class StockHashMap {
+	private HashMap<String, Integer> stockMap = new HashMap<String, Integer>();
+	private Scanner scanner = new Scanner(System.in);
+	
+	public StockHashMap() { }
+
+	// 사용자로부터 여러 주식 종목과 주가 입력
+	private void read() {
+		System.out.println("주식 종목과 주가를 입력하세요(예:삼송전자 75000)");
+		while(true) {
+			System.out.print("종목, 주가>>");
+			String stockName = scanner.next();
+			if(stockName.equals("그만"))
+				 break;
+			int stockPrice = scanner.nextInt();
+			stockMap.put(stockName, stockPrice);
+		}
+	}
+	
+	// 종목을 입력받고 주가 검색
+	private void search() {
+		System.out.println("주가를 검색합니다.");
+		while(true) {
+			System.out.print("종목>>");
+			String stockName = scanner.next();
+			if(stockName.equals("그만"))
+				 break;
+			Integer stockPrice = stockMap.get(stockName);
+			if(stockPrice == null) 
+				System.out.println(stockName + "은 없는 종목입니다.");
+			else 
+				System.out.println(stockName + "의 주가는 " + stockPrice + "원");
+		}
+	}
+	
+	public void run() {
+		read(); // 사용자로부터 여러 주식 종목과 주가 입력
+		search();
+	}
+	
+	public static void main(String[] args) {
+		StockHashMap app = new StockHashMap();
+		app.run();
+	}
+
+}
+--------------------------------------------------------------------
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Scanner;
+import java.util.Set;
+
+public class MileageApp {
+	private HashMap<String, Integer> map = new HashMap<String, Integer>();
+	private Scanner scanner = new Scanner(System.in);
+	
+	public MileageApp() { }
+	
+	private void read() {
+		while(true) {
+			System.out.print("이름과 마일리지>>");
+			String name = scanner.next();
+			if(name.equals("그만"))
+				break;
+
+			int mileage = scanner.nextInt();
+			// 사용자 입력 오류 처리 안 함
+			
+			Integer value = map.get(name);
+			if(value == null) { // 이름이 해시맵에 없는 경우
+				map.put(name, mileage);
+			}
+			else { // 이름이 이미 해시맵에 있는 경우
+				mileage += value; // value가 int로 자동 언박싱됨
+				map.put(name, mileage);
+			}
+		}
+		
+	}
+	
+	private void viewAll() { // 전체 출력과 함께 최고 마일리지 소유자 출력
+		Set<String> keys = map.keySet(); // map 내의 모든 키들 알아내기
+		Iterator<String> it = keys.iterator(); // 키들의 iterator
+		
+		String bestUser = "";
+		int bestMileage = 0;
+		while(it.hasNext()) { // 전체 키 셋 방문
+			String name = it.next();
+			int mileage = map.get(name);
+			System.out.print("(" + name + ":" + mileage+")");
+			
+			// 현재까지 가장 마일리지가 높은 사용자 결정 
+			if(bestMileage < mileage) {
+				bestMileage = mileage;
+				bestUser = name;
+			}
+		}
+		System.out.println("가장 마일리지가 높은 고객은 " + bestUser + "입니다.");
+	}
+	
+	public void run() {
+		System.out.println("*** 마일리지 관리 프로그램입니다.***");
+		read();
+		viewAll();
+		System.out.println("프로그램을 종료합니다.");
+	}
+	
+	public static void main(String[] args) {
+		MileageApp app = new MileageApp();
+		app.run();
+	}
+
+}
+----------------------------------------------------------------------------
+import java.util.*;
+
+// 하나의 도시를 묘사하는 클래스
+class Location {
+	private String city;
+	private double longitude; // 경도
+	private double latitude; // 위도
+	
+	public Location(String city, double longitude, double latitude) {
+		this.city = city;
+		this.longitude = longitude;
+		this.latitude = latitude;
+	}
+	public void setCity(String city) { 
+		this.city = city;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setLogitude(double longitude) {
+		this.longitude = longitude;
+	}
+	public double getLongitude() {
+		return longitude;
+	}
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+	public double getLatitude() {
+		return latitude;
+	}
+}
+
+public class LocationManagerHashMap {
+	private Scanner scanner = new Scanner(System.in);
+	private HashMap<String, Location> locMap = new HashMap<String, Location>();
+	
+	private void read() {
+		System.out.println("도시,경도,위도를 입력하세요.");
+		for (int i=0; i<4; i++) {
+			System.out.print(">> ");
+			String text = scanner.nextLine();
+			StringTokenizer st = new StringTokenizer(text, ",");
+			String city = st.nextToken().trim();
+			double logitude = Double.parseDouble(st.nextToken().trim());
+			double latitude = Double.parseDouble(st.nextToken().trim());
+			
+			Location loc = new Location(city, logitude, latitude);
+			locMap.put(city, loc); //해시맵에 저장
+		}			
+	}
+	
+	private void printAll() {
+		Set<String> key = locMap.keySet();
+		Iterator<String> it = key.iterator();
+		System.out.println("---------------------------");
+		while (it.hasNext()) {
+			String city = it.next(); // 도시 이름 알아냄
+			Location loc = locMap.get(city); // 도시 이름을 키로하여 해시맵에서 Locaiton 객체 얻어냄
+
+			System.out.print(loc.getCity() + "\t");
+			System.out.print(loc.getLongitude() + "\t");
+			System.out.println(loc.getLatitude());
+		}
+		System.out.println("---------------------------");		
+	}
+
+	private void processQuery() {
+		while(true) {
+			System.out.print("도시 이름 >> ");
+			String city = scanner.nextLine(); // 도시 이름 입력
+			if(city.equals("그만"))
+				return; // 종료
+			
+			Location loc = locMap.get(city); // 해시맵에서 도시를 키로 검색
+			if(loc == null) { // 도시가 해시맵에 없다면
+				System.out.println(city + "는 없습니다.");
+			}
+			else { // 해시맵에서 검색된 Location 객체
+				System.out.print(loc.getCity()  + "\t");
+				System.out.print(loc.getLongitude() + "\t");
+				System.out.println(loc.getLatitude());
+			}
+		}
+	}
+	
+	public void run() {
+		read();
+		printAll();
+		processQuery();
+	}
+	
+	public static void main (String[] args) {
+		LocationManagerHashMap man = new LocationManagerHashMap();
+		man.run();
+	}
+}
+-------------------------------------------------------------------------------------------
+import java.util.*;
+
+// 하나의 도시를 묘사하는 클래스
+class Location {
+	private String city;
+	private double longitude; // 경도
+	private double latitude; // 위도
+	
+	public Location(String city, double longitude, double latitude) {
+		this.city = city;
+		this.longitude = longitude;
+		this.latitude = latitude;
+	}
+	public void setCity(String city) { 
+		this.city = city;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setLogitude(double longitude) {
+		this.longitude = longitude;
+	}
+	public double getLongitude() {
+		return longitude;
+	}
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+	public double getLatitude() {
+		return latitude;
+	}
+}
+
+public class LocationManagerArrayList {
+	private Scanner scanner = new Scanner(System.in);
+	private ArrayList<Location> locList = new ArrayList<Location>();
+	
+	private void read() {
+		System.out.println("도시,경도,위도를 입력하세요.");
+		for (int i=0; i<4; i++) {
+			System.out.print(">> ");
+			String text = scanner.nextLine();
+			StringTokenizer st = new StringTokenizer(text, ",");
+			String city = st.nextToken().trim();
+			double logitude = Double.parseDouble(st.nextToken().trim());
+			double latitude = Double.parseDouble(st.nextToken().trim());
+			
+			Location loc = new Location(city, logitude, latitude);
+			locList.add(loc); // ArrayList 에 저장
+		}			
+	}
+	
+	private void printAll() {
+		System.out.println("---------------------------");
+		for(Location loc : locList) {
+			System.out.print(loc.getCity() + "\t");
+			System.out.print(loc.getLongitude() + "\t");
+			System.out.println(loc.getLatitude());
+		}
+		System.out.println("---------------------------");		
+	}
+
+	private void processQuery() {
+		while(true) {
+			System.out.print("도시 이름 >> ");
+			String city = scanner.nextLine(); // 도시 이름 입력
+			if(city.equals("그만"))
+				return; // 종료
+			
+			
+			Location foundLoc = null; 
+			for(Location loc : locList) { // ArrayList 전체 검색
+				if(loc.getCity().equals(city)) { // 도시 이름이 저장된 이름과 같다면
+					foundLoc = loc;
+					break;
+				}
+			}
+			if(foundLoc == null) { // 도시가 ArrayList에 저장되어 있지 않다면
+				System.out.println(city + "는 없습니다.");
+			}
+			else { // 검색된 Location 객체
+				System.out.print(foundLoc.getCity()  + "\t");
+				System.out.print(foundLoc.getLongitude() + "\t");
+				System.out.println(foundLoc.getLatitude());
+			}
+		}
+	}
+	
+	public void run() {
+		read();
+		printAll();
+		processQuery();
+	}
+	
+	public static void main (String[] args) {
+		LocationManagerArrayList man = new LocationManagerArrayList();
+		man.run();
+	}
+}
+----------------------------------------------------------------------------------------------
+import java.util.Scanner;
+import java.util.Vector;
+
+abstract class Shape {
+	private Shape next;
+	public Shape() { next = null;}
+	public void setNext(Shape obj) {next = obj;} // 링크 연결
+	public Shape getNext() {return next;}
+	public abstract void draw(); // 추상 메소드. Shape을 상속받는 클래스는 draw()를 반드시 구현해야 함
+}
+
+class Circle extends Shape {
+	@Override
+	public void draw() {
+		 System.out.println("Circle");
+	}
+}
+
+class Rect extends Shape {
+	@Override
+	public void draw() {
+		 System.out.println("Rect");
+	}
+}
+
+class Line extends Shape {
+	@Override
+	public void draw() {
+		 System.out.println("Line");
+	}
+}
+
+public class GraphicEditor {
+	private String editorName;
+	private Scanner scanner = new Scanner(System.in);
+	private Vector<Shape> v = new Vector<Shape>(); // Shape을 상속받은 어떤 객체들 저장하는 벡터
+	
+	public GraphicEditor(String editorName) {
+		this.editorName = editorName;
+	}
+	
+	public void run() {
+		System.out.println("그래픽 에디터 " + editorName + "를 실행합니다.");
+		int menu = 0;
+		while (menu != 4) { 
+			int shape, index;
+			System.out.print("삽입(1), 삭제(2), 모두 보기(3), 종료(4)>>");
+			menu = scanner.nextInt();
+			switch (menu) {
+				case 1:	// 삽입
+					System.out.print("Line(1), Rect(2), Circle(3)>>");
+					shape = scanner.nextInt();
+					if (shape < 1 || shape > 3) {
+						System.out.println("잘못 선택하셨습니다.");
+						break;
+					}
+					insert(shape); // 도형 삽입
+					break;
+				case 2:	// 삭제
+					System.out.print("삭제할 도형의 위치>>");
+					index = scanner.nextInt();
+					if (!delete(index)) { // 도형 삭제. delete()는 삭제할 수 없으면 false 리턴  
+						System.out.println("삭제할 수 없습니다.");
+					}
+					break;
+				case 3:	// 모두 보기
+					view();
+					break;
+				case 4:	// 끝내기
+					break;
+				default:
+					System.out.println("잘못 입력하셨습니다.");
+			}
+		}
+		System.out.println(editorName + "를 종료합니다.");	
+	}
+
+	// 벡터에 저장된 모든 도형 그리기
+	private void view() {
+		for(int i=0; i<v.size(); i++) 
+			v.get(i).draw(); // 각 도형의 오버라이딩된 draw() 호출
+	}
+	
+	// 벡터 내 index 위치의 도형 삭제
+	private boolean delete(int index) {
+		if (v.size() == 0 || index >= v.size()) // 벡터가 비거나, 인덱스에 도형이 없는 경우
+			return false;
+		v.remove(index);
+		return true;
+	}
+
+	private void insert(int choice) {
+		Shape shape=null;
+		switch (choice) {
+			case 1: // Line
+				shape = new Line();
+				 break;
+			case 2: // Rect
+				shape = new Rect();
+				break;
+			case 3: // Circle
+				shape = new Circle();
+		}
+		v.add(shape);
+	}
+	
+	public static void main(String [] args) {
+		GraphicEditor ge = new GraphicEditor("Beauty Graphic Editor");
+		ge.run();
+	}
+}
+--------------------------------------------------------------------------------------
+import java.util.HashMap;
+import java.util.Scanner;
+import java.util.*;
+
+public class WalkingStepManager {
+	// 이름과 걸음 수를 저장할 해시맵 생성
+	private HashMap<String, ArrayList<Integer>> map = new HashMap<String, ArrayList<Integer>>();
+	private Scanner scanner = new Scanner(System.in);
+
+	public WalkingStepManager() { }
+	
+	private void read() {
+		// '그만'이 입력될 때까지 이름과 걸음수 입력.
+		// 새 이름의 경우 해시맵에 새 항목을 생성하고 걸음 수들을 저장하며,
+		// 동일한 이름의 경우 기존 ArrayList에 누적하여 저장
+		while(true) {
+			System.out.print("이름과 걸음수>>");
+			String line = scanner.nextLine(); // 한 라인 입력
+			if(line.equals("그만"))
+				break;	
+			
+			String [] tokens = line.split(" "); // 라인을 공백으로 분리
+			String name = tokens[0]; // 첫번째 토큰은 이름
+			ArrayList<Integer> list = map.get(name); // 해시맵에서 name의 키를 가진 ArrayList 읽기
+			if(list == null) { // 이름이 없는 경우
+				list = new ArrayList<Integer>(); // 빈 ArrayList 생성
+				map.put(name, list); // 이름과 빈 ArrayList 삽입
+			}
+			// 이름이 해시맵에 이미 있는 경우, list 그대로 이용
+			for(int i=0; i<tokens.length - 1; i++) 
+				list.add(Integer.parseInt(tokens[i+1])); // 두번째 토큰부터는 점수들
+		}	
+	}
+	
+	private void decideBest() {
+		Set<String> keys = map.keySet(); // 해시맵에 저장된 모든 키(이름)을 알아낸다.
+		Iterator<String> it = keys.iterator();
+		String bestName = ""; // 가장 많이 걸은 사람 이름
+		int bestWalkSum = 0; // 가장 많이 걸은 걸음 수
+		while(it.hasNext()) {
+			String name = it.next();
+			ArrayList<Integer> list = map.get(name); // 이름으로 해시맵 검색
+			
+			// name의 총 걸음 수 계산
+			int sum = 0;
+			for(int walk : list) 
+				sum += walk;
+			
+			// 최고의 걸음수와 비교하여 최고의 사람 결정
+			if(bestWalkSum < sum) {
+				bestWalkSum = sum;
+				bestName = name;
+			}
+		}		
+		System.out.println("걸음수가 가장 많은 사람은 " + bestName + " " + bestWalkSum + "보");
+	}
+
+	private void search() {
+		while(true) {
+			System.out.print("검색할 이름>>");
+			String name = scanner.next(); // 한 라인 입력
+			if(name.equals("그만"))
+				break;		
+			
+			ArrayList<Integer> list = map.get(name); // 이름으로 해시맵 검색. 벡터 알아냄
+			if(list == null) { // 이름이 해시맵에 없는 경우
+				System.out.println(name + "은 없는 학생입니다.");
+				continue;
+			}
+			
+			int sum = 0;
+			for(int score : list) {
+				System.out.print(score + " ");
+				sum += score;
+			}
+			
+			System.out.println("평균 " + sum/list.size());			
+		}	
+	}
+	
+	public void run() {
+		read();
+		decideBest();
+		search();
+	}
+	
+	public static void main(String[] args) {
+		WalkingStepManager man = new WalkingStepManager();
+		man.run();
+	}
+}
+------------------------------------------------------------------------------------------------
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class PhoneWriterEx {
+
+	public static void main(String[] args) {
+		FileWriter fw = null;
+		File f = new File("c:\\temp\\phone.txt");
+		try {
+			fw = new FileWriter(f);
+			Scanner scanner = new Scanner(System.in);
+			
+			System.out.println("전화번호 입력 프로그램입니다.");
+			while(true) {
+				System.out.print("이름 전화번호 >> ");
+				String line = scanner.nextLine(); // 한줄을 읽는다.
+				if(line.equals("그만"))
+						break; // 입력 종료
+				fw.write(line+"\r\n"); // 한 줄 띄어 저장하기 위해 "\r\n"을 붙인다.
+			}
+			System.out.println(f.getPath()+"에 저장하였습니다.");
+			
+			scanner.close();
+			fw.close();
+		} 
+		catch (IOException e) { // 파일을 저장할 수 없는 경우 예외
+			e.printStackTrace();
+		}
+	}
+
+}
+----------------------------------------------------------------------------------------------
+import java.io.*;
+
+public class UpperCharacter {
+
+	public static void main(String[] args) {
+		try {
+			File f = new File("c:\\windows\\system.ini");
+			FileReader fin = new FileReader(f);
+			int c;
+			while((c=fin.read()) != -1) {
+				char a = (char)c;
+				if(Character.isLowerCase(a))
+					a = Character.toUpperCase(a);
+				System.out.print((char)a);
+			}
+			fin.close();
+		}
+		catch(IOException e) {
+			System.out.println("파일 읽기 오류");
+		}
+
+	}
+
+}
+-------------------------------------------------------------------------------------
+import java.io.*;
+import java.util.Scanner;
+
+public class UpperCharacterUsingScanner {
+
+	public static void main(String[] args) {
+		try {
+			File f = new File("c:\\windows\\system.ini");
+			Scanner scanner = new Scanner(new FileReader(f));
+			while(scanner.hasNext()) {
+				String line = scanner.nextLine();
+				line = line.toUpperCase();
+				System.out.println(line);
+			}
+			scanner.close();
+		}
+		catch(IOException e) {
+			System.out.println("파일 읽기 오류");
+		}
+
+	}
+
+}
+--------------------------------------------------------------------------------------
+import java.io.*;
+import java.util.Scanner;
+
+public class CompareFiles {
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		FileInputStream srcStream = null;
+		FileInputStream destStream = null;
+		
+		System.out.println("전체 경로명이 아닌 파일 이름만 입력하는 경우, 파일은 프로젝트 폴더에 있어야 합니다.");
+		
+		System.out.print("첫번째 파일 이름을 입력하세요>>");
+		String src = scanner.nextLine();
+		
+		System.out.print("두번째 파일 이름을 입력하세요>>");
+		String dst = scanner.nextLine();
+		
+		System.out.println(src + "와 " + dst + "를 비교합니다.");
+		try {
+			srcStream = new FileInputStream(src); // 버퍼 입력 스트림에 연결
+			destStream = new FileInputStream(dst); // 버퍼 출력 스트림에 연결
+			if (compareFile(srcStream, destStream))
+				System.out.println("파일이 같습니다.");
+			else
+				System.out.println("파일이 다릅니다.");
+			
+            if (srcStream != null) srcStream.close();
+            if (destStream != null) destStream.close();
+		} catch (IOException e) {
+			System.out.println("입출력 오류가 발생했습니다.");
+		}
+		
+		scanner.close();
+	}
+
+	private static boolean compareFile(FileInputStream src, FileInputStream dest) throws IOException {
+		byte[] srcBuf = new byte[1024]; // 1KB 버퍼
+		byte[] destbuf = new byte[1024];  // 1KB 버퍼
+		
+		int srcCount=0, destCount;
+		while (true) {
+			srcCount = src.read(srcBuf, 0, srcBuf.length); // src 스트림에서 srcBuf 크기만큼 읽기
+			destCount = dest.read(destbuf, 0, destbuf.length); // dest 스트림에서 destBuf 크기만큼 읽기
+			if (srcCount != destCount) // 읽어들인 바이트 수가 다르면 파일이 다름 
+				return false;
+			
+			if(srcCount == -1)
+				break; // 파일 끝에 도달함
+			
+			for (int i=0; i<srcCount; i++) {
+				if (srcBuf[i] != destbuf[i]) // 읽은 바이트들 비교
+					return false;
+			}
+		}
+		return true;
+	}
+}
+----------------------------------------------------------------------------------------------------
+import java.io.*;
+
+public class FileCopy {
+	public static void main(String[] args) {
+		BufferedInputStream srcStream = null;
+		BufferedOutputStream destStream = null;
+		File srcFile = new File("a.jpg");
+		File destFile = new File("b.jpg");
+		try {
+			srcStream = new BufferedInputStream(new FileInputStream(srcFile)); // 버퍼 입력 스트림에 연결
+			destStream = new BufferedOutputStream(new FileOutputStream(destFile)); // 버퍼 출력 스트림에 연결
+			
+			long tenPercent = srcFile.length() / 10; // 파일의 10% 크기
+			long progress = 0; // 파일 크기 10% 될 때까지 읽은 누적 바이트 수
+			
+			System.out.println("a.jpg를 b.jpg로 복사합니다. \n10%마다 *를 출력합니다.");
+			byte[] buf = new byte[1024]; // 한 번 읽는 단위
+			int numRead = 0; // 읽은 바이트 수 
+			while (true) {
+				numRead = srcStream.read(buf, 0, buf.length);
+				if(numRead == -1) { // 파일 끝에 도달함
+					if(progress > 0) { // 지난번에 읽었지만 10%에 도달하지 않아 *가 출력되지 않은 경우
+						System.out.print("*");
+					}
+					break; // 파일 끝에 도달함
+				}
+				if (numRead > 0)
+					destStream.write(buf, 0, numRead);
+				
+				progress += numRead; // 파일 크기 10% 될 때까지 읽은 누적 바이트 수
+				if (progress >= tenPercent) { // 10% 만큼 읽었다면
+					System.out.print("*");
+					progress = 0; // * 출력하고 progress를 0으로 리셋
+				}
+			}
+           	srcStream.close();
+           	destStream.close();
+		} catch (IOException e) {
+			System.out.println("입출력 오류가 발생했습니다.");
+		}
+	}
+}
+--------------------------------------------------------------------------------------------
+import java.io.File;
+
+public class FileDelete {
+
+	public static void main(String[] args) {
+		File dir = new File("c:\\temp\\");
+		File [] files = dir.listFiles(); // 디렉토리의 파일 리스트
+		
+		System.out.println(dir.getPath() + "디렉터리의 .txt 파일을 모두 삭제합니다....");
+		int count = 0;
+		for(int i=0; i<files.length; i++) {
+			if(!files[i].isFile()) // 파일이 아니면 다음으로
+				continue;
+			
+			String name = files[i].getName();
+			int index = name.lastIndexOf('.'); // 파일명 문자열에서 제일 마지막에 있는 '.' 의 인덱스
+			if(index == -1) // 찾을 수 없음
+				continue;
+			
+			String ext = name.substring(index); // ext = ".txt" 
+			if(ext.equals(".txt")) {
+				System.out.println(files[i].getPath() + " 삭제");
+				files[i].delete();
+				count++;
+			}
+		}
+		System.out.println("총 "+ count + "개의 .txt 파일을 삭제하였습니다.");
+	}
+
+}
+---------------------------------------------------------------------------------------
+import java.io.*;
+import java.util.*;
+
+public class WordSearch {
+	private Vector<String> wordVector = new Vector<String>();
+	
+	public WordSearch() { }
+	
+	private boolean readFile() { // words.txt 파일 읽기
+		try {
+			Scanner fScanner = new Scanner(new FileInputStream("words.txt"));
+			while(fScanner.hasNext()) 
+				wordVector.add(fScanner.nextLine()); // 한 라인에 하나의 단어
+			fScanner.close();
+		}catch(FileNotFoundException e) { 
+			System.out.println("프로젝트 폴더 밑의 words.txt 파일이 없습니다");
+			return false;
+		} 
+		System.out.println("프로젝트 폴더 밑의 words.txt 파일을 읽었습니다...");
+		return true;
+	}
+	
+	private void processQuery() { // 단어 검색
+		Scanner scanner = new Scanner(System.in);
+		while(true) {
+			boolean found = false;
+			System.out.print("단어>>");
+			String searchWord = scanner.nextLine(); // 검색할 단어 입력
+			if(searchWord.equals("그만")) { 
+				break; // 검색 종료
+			}
+			
+			// 벡터에서 검색
+			for(int i=0; i<wordVector.size(); i++) {
+				String word = wordVector.get(i); // 벡터 내의 문자열
+				if(word.length() < searchWord.length()) // 벡터의 문자열이 검색 문자열보다 짧은 경우 
+					continue;
+				
+				// 벡터문자열의 앞부분을 검색 문자열 크기만큼 잘라내기
+				String frontPart = word.substring(0, searchWord.length());
+				
+				if(searchWord.equals(frontPart)) { // 검색 문자열과 잘라낸 앞 부분 비교
+					System.out.println(word); // 벡터에서 발견한 단어 출력
+					found = true;
+				}
+			}
+			if(!found) // 한 단어도 발견못한 상태
+				System.out.println("발견할 수 없음");
+		}
+		scanner.close();
+
+	}
+	
+	public void run() {
+		boolean res = readFile(); // res가 false이면  단어 파일 읽기 실패
+		if(res == true)
+			processQuery();
+		System.out.println("종료합니다...");
+	}
+	
+	public static void main(String[] args) {
+		WordSearch ws = new WordSearch();
+		ws.run();
+	}
+}
+------------------------------------------------------------------------------------
+import java.io.File;
+import java.util.Scanner;
+
+public class FileExplorer {
+	private File currentDir = null;
+	private File subFiles [] = null;
+	
+	public FileExplorer(String dirName) {
+		currentDir = new File(dirName);
+	}
+
+	private void showSubDirtories() {
+		System.out.println("\t[" + currentDir.getPath() + "]");
+		subFiles = currentDir.listFiles();
+		for(File f : subFiles) {
+			System.out.print(((f.isFile())?"file":"dir"));
+			System.out.printf("%-15s", "\t\t" + f.length() + "바이트");
+			System.out.println("\t\t" + f.getName());
+		}		
+	}
+	
+	private boolean contains(String filename) {
+		for(File f : subFiles) {
+			if(f.getName().equalsIgnoreCase(filename))
+				return true;
+		}
+		return false;
+	}
+	
+	public void run() {
+		Scanner scanner = new Scanner(System.in);
+		
+		System.out.println("***** 파일 탐색기입니다. *****");
+		showSubDirtories();
+		
+		while(true) {
+			System.out.print(">>");
+			String command = scanner.nextLine().trim(); // 한 라인을 읽고 앞뒤에 입력한 빈칸 지우기
+			if(command.equals("그만"))
+				break; // 프로그램 종료
+			if(command.equals("..")) {
+				String s = currentDir.getParent();
+				if(s == null) // s가 null이면, currentDir가 현재 최상위 디렉터리라서 부모 디렉터리가 없음
+					continue;
+				else { 					
+					currentDir = new File(currentDir.getParent());
+					showSubDirtories();
+				}
+
+			}
+			else { // command는 서브디렉토리이름
+				if(contains(command)) { // 현재 디렉터리의 파일이나 서브디렉토리라면
+					if(new File(currentDir, command).isDirectory()) { // 디렉터리라면
+						currentDir = new File(currentDir, command);
+						showSubDirtories();
+					}
+					else { // 파일인 경우
+						System.out.println("\t디렉터리가 아닙니다.!");
+					}
+				}
+			}
+		}
+		
+		scanner.close();
+	}
+	
+	public static void main(String[] args) {
+		FileExplorer fe = new FileExplorer("c:\\");
+		fe.run();
+	}
+
+}
