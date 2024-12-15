@@ -1,0 +1,381 @@
+import java.awt.*;
+import javax.swing.*;
+
+public class Plate4x4Frame extends JFrame {
+	private Color [] color = {Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN,
+							Color.CYAN, Color.BLUE, Color.MAGENTA, Color.GRAY,
+							Color.PINK, Color.LIGHT_GRAY, Color.WHITE, Color.DARK_GRAY,
+							Color.BLACK, Color.ORANGE, Color.BLUE,Color.MAGENTA}; 
+
+	public Plate4x4Frame() {
+		super("4x4 Color 프레임");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		Container c = getContentPane(); // 컨텐트팬 알아내기
+		c.setLayout(new GridLayout(4, 4)); // 컨텐트팬에 4x4 격자의 GridLayout 배치관리자 지정
+		
+		JLabel [] label = new JLabel [16]; // 16개의 JLabel 객체에 대한 레퍼런스 배열 생성
+		for(int i=0; i<label.length; i++) {
+			label[i] = new JLabel(Integer.toString(i)); // JLabel 객체 생성
+			label[i].setOpaque(true); // JLabel 객체의 배경색이 불투명하게 출력되도록 지정
+			label[i].setBackground(color[i]); // JLabel 객체에 배경색 설정
+			c.add(label[i]); // JLabel 객체를 컨텐트팬에 부착
+		}
+		setSize(500,200);
+		setVisible(true);
+	}
+	
+	public static void main(String[] args) {
+		new Plate4x4Frame();
+	}
+
+}
+===========================================================
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class ClickPracticeFrame extends JFrame {
+	public ClickPracticeFrame() {
+		super("클릭 연습 응용프로그램");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Container c = getContentPane();
+		c.setLayout(null); // 배치관리자 제거
+		
+		JLabel label = new JLabel("C");
+		c.add(label);
+		
+		// 레이블에 절대 위치 지정
+		label.setLocation(100,60);
+		label.setSize(20, 20);
+		label.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				JLabel la = (JLabel)e.getSource();
+				Container c = la.getParent(); // 클릭된 레이블의 컨테이너 알아내기
+				
+				// 컨테이너 내에서 랜덤한 레이블 위치 설정
+				int xBound = c.getWidth() - la.getWidth(); // 레이블의 폭 만큼 감소
+				int yBound = c.getHeight() - la.getHeight(); // 레이블의 높이 만큼 감소				
+				int x = (int)(Math.random()*xBound);
+				int y = (int)(Math.random()*yBound);				
+				la.setLocation(x, y); // 레이블의 위치 이동
+			}
+		});
+
+		setSize(300,200);
+		setVisible(true);
+	}
+	static public void main(String [] args) {
+		new ClickPracticeFrame();
+	}
+}
+================================================
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class TenLabelsFrame extends JFrame {
+	private JLabel [] gameLabels = new JLabel [10]; // 0~9까지의 레이블 배치
+	private int nextPressed = 0;
+	public TenLabelsFrame() {
+		super("Ten 레이블 클릭");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Container c = getContentPane();
+		c.setLayout(null);
+		
+		setSize(300,300);
+		setVisible(true);
+		
+		for(int i=0; i<gameLabels.length; i++) {
+			gameLabels[i] = new JLabel(Integer.toString(i)); // 레이블 생성
+			gameLabels[i].setFont(new Font("Gothic", Font.PLAIN, 15));
+			gameLabels[i].setForeground(Color.MAGENTA);
+			c.add(gameLabels[i]); // 레이블을 콘텐트팬에 부탁
+			
+			// 0,1,2 순으로 삽입하면, 2,1,0 순으로 화면에 출력된다. 
+			// 그러르모 2와 1이 같은 위치에 겹치게 되더라도 1이 먼저 보이기 되므로
+			// 순서대로 클릭할 수 있다.
+			
+			gameLabels[i].addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
+					JLabel la = (JLabel)e.getSource();
+					if(Integer.parseInt(la.getText()) == nextPressed) { 
+						nextPressed++;
+						if(nextPressed == 10) {
+							nextPressed = 0;
+							configure();
+						}
+						else 
+							la.setVisible(false);
+					}
+				}
+			});
+		}
+		configure(); // 콘텐트 팬c에 1,2,3.. 레이블 배치
+	}
+	
+	private void configure() {
+		Container c = getContentPane();
+		for(int i=0; i<gameLabels.length; i++) {
+			gameLabels[i].setSize(15, 15); // 크기를 먼저 지정하여야 뒤에서 getWidth(), getHeight()의 값이 정확해짐
+			
+			int xBound = c.getWidth() - gameLabels[i].getWidth(); // 레이블의 폭 만큼 감소
+			int yBound = c.getHeight() - gameLabels[i].getHeight(); // 레이블의 높이 만큼 감소				
+			int x = (int)(Math.random()*xBound);
+			int y = (int)(Math.random()*yBound);				
+			gameLabels[i].setLocation(x, y);
+			gameLabels[i].setVisible(true);
+		}
+	}
+	static public void main(String [] args) {
+		new TenLabelsFrame();
+	}
+}
+============================================
+import java.awt.*;
+import javax.swing.*;
+
+public class TextRandomPlaceGame extends JFrame {
+	private String text ="I can't help falling in love with you";
+	
+	public TextRandomPlaceGame() {
+		super("Open Challenge 9");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		Container c = getContentPane(); // 컨텐트팬 알아내기
+		c.add(new NorthPanel(), BorderLayout.NORTH);
+		c.add(new CenterPanel(), BorderLayout.CENTER);
+		c.add(new SouthPanel(), BorderLayout.SOUTH);
+
+		setSize(400,300);
+		setVisible(true);
+	}
+	
+	class NorthPanel extends JPanel { // 컨텐트팬의 NORTH 영역 패널
+		public NorthPanel() {
+			setBackground(Color.LIGHT_GRAY); // 배경색 설정
+			setLayout(new FlowLayout()); // FlowLayout 배치관리자 지정
+			add(new JLabel("단어 조합 게임! 순서대로 단어를 클릭하세요~~ "));
+			add(new JButton("New Text"));
+		}
+	}
+	
+	class SouthPanel extends JPanel { // 컨텐트팬의 NORTH 영역 패널
+		public SouthPanel() {
+			setBackground(Color.YELLOW); // 배경색 설정
+			setLayout(new FlowLayout()); // FlowLayout 배치관리자 지정
+			add(new JLabel("이름"));		
+			add(new JTextField(10));
+		}
+	}
+	
+	class CenterPanel extends JPanel {	// 컨텐트팬의 CENTER 영역 패널
+		public CenterPanel() {
+			setLayout(null); // 배치관리자 삭제, 절대 위치에 컴포넌트 삽입
+			setBackground(Color.WHITE);
+			place(this, text);
+		}
+		private void place(Container c, String text) { // text의 문자열을 단어별로 쪼개 컨테이너 c에 분산 배치 
+			String [] words = text.split(" "); // text 문자열을 " "을 기준으로 단어 분리. words [] 단어 배열 생성 
+			for(int i=0; i<words.length; i++) { // 각 단어 대해 루프
+				JLabel label = new JLabel(words[i]); // 단어를 JLabel로 생성
+				int x = (int)(Math.random()*350);
+				int y = (int)(Math.random()*180);
+				label.setLocation(x,y); // 랜덤한 위치에 배치
+				label.setSize(50, 20);
+				c.add(label); // 레이블을 CenterPanel에 부착
+			}			
+		}
+
+	}
+
+	public static void main(String[] args) {
+		new TextRandomPlaceGame();
+	}
+
+}
+===================================================
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+public class OddOrEvenGameFrame extends JFrame {
+	public OddOrEvenGameFrame() {
+		super("홀짝 게임");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(300,230);
+		setContentPane(new MyPanel());
+		setVisible(true);
+	}
+	
+	class MyPanel extends JPanel { // 컨텐트팬
+		private int answer; // 숨겨진 정수(정답). 1~10 사이의 랜덤한 정수
+		private JLabel label = new JLabel("?");
+		private JLabel msg = new JLabel("무엇일까요?");
+		private JButton [] btns = { new JButton("홀"), new JButton("짝"), new JButton("확인"), new JButton("다시")  };
+		
+		public MyPanel() {
+			setLayout(null); // 배치 관리자 제거
+			
+			// '?'를 출력하는 마젠타 색의 레이블(박스)
+			label.setFont(new Font("고딕", Font.PLAIN, 30));
+			label.setHorizontalAlignment(JLabel.CENTER);
+			label.setForeground(Color.YELLOW);
+			label.setBackground(Color.MAGENTA);
+			label.setOpaque(true);
+			label.setSize(80, 80);
+			label.setLocation(100, 20);
+			add(label);
+			refresh(); // 새로운 정수(1~10)를 랜덤하게 생성하여 answer에 저장 
+			
+			// 메시지를 출력하는 레이블
+			msg.setSize(130, 50);
+			msg.setLocation(70, 100);
+			msg.setHorizontalAlignment(JLabel.CENTER);
+			add(msg);
+
+			MyAction myAction = new MyAction(); // 액션 리스너
+			
+			for(int i=0; i<btns.length; i++) {
+				JButton b = btns[i];
+				b.addActionListener(myAction); // 액션 리스너를 버튼에 부착
+				b.setSize(60, 30);
+				b.setLocation(10 + i*65, 150);
+				add(b);
+			}
+			
+		}
+		
+		private void refresh() {
+			answer = (int)(Math.random()*10) + 1; // 1에서 10까지의 정수, [1,10]
+			label.setText("?");
+			msg.setText("무엇일까요?");
+		}
+		
+		class MyAction implements ActionListener {
+			private String user; // 사용자가 선택한 답. "홀"이나 "짝" 중 하나
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JButton b = (JButton)e.getSource();
+				switch(b.getText()) {
+					case "홀" : // "홀" 버튼을 클릭한 경우
+						user = "홀"; break;
+					case "짝" : // "짝" 버튼을 클릭한 경우
+						user = "짝"; break;							
+					case "확인" : // "확인" 버튼을 클릭한 경우
+						check(); // 승리한 것인지 실패한 것인지 판단
+						user = ""; // 사용자의 이전 선택 내용 지우기					
+						break;
+					case "다시" :
+						user = ""; // 사용자의 이전 선택 내용 지우기
+						refresh(); 
+						break;												
+				}
+			}
+			
+			private void check() { // 승리한 것인지 실패한 것인지 판단
+				if(user == null || user.length() == 0) {
+					msg.setText("홀이나 짝 먼저 선택!");
+					return; // 사용자가 홀이나 짝 중 선택한 적이 없는 경우
+				}
+				
+				label.setText(Integer.toString(answer));
+				String res;
+				if(answer%2 == 1) // 정답이 홀 인 경우
+					res = "홀";
+				else // 정답이 짝 인 경우
+					res = "짝";
+				
+				if(user.equals(res)) 
+					res += "! 맞았어요.";
+				else
+					res += "! 아쉽군요";
+				msg.setText(res);
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		new OddOrEvenGameFrame();
+	}
+
+}
+====================================================
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
+
+public class ButtonAndImageLabelFrame extends JFrame {
+	private JLabel imageLabel; // 이미지 레이블
+	private ImageIcon [] images = new ImageIcon [4]; // 이미지 객체 배열
+	int currentId; // 현재 선택된 이미지 번호(0~3).
+	
+	public ButtonAndImageLabelFrame() {
+		setTitle("Open Challenge 11");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		Container c = getContentPane(); // 컨텐트팬 얻기
+		c.setLayout(new BorderLayout()); // 컨텐트팬에 BorderLayout 설정
+
+		 // 이미지 파일 로딩.
+		// 프로젝트의 images 폴터의 images0.jpg, image1.jpg, image2.jpg, image3.jpg
+		for(int i=0; i<images.length; i++)  
+			images[i] = new ImageIcon("images/image" + i + ".jpg");
+
+		currentId = 0; // 현재 선택된 이미지 번호
+		imageLabel = new JLabel(images[currentId]); // 현재 선택된 이미지를 레이블에 출력
+		c.add(imageLabel, BorderLayout.CENTER); // 이미지 레이블을 CENTER에 부착
+		c.add(new MenuPanel(), BorderLayout.SOUTH); // 2 개의 화살표 버튼을 가진 MenuPanel 부착
+		
+		setSize(300,400);
+		setVisible(true);
+	}
+
+	// 두 개의 화살표 버튼을 가진 메뉴 패널
+	class MenuPanel extends JPanel {
+		public MenuPanel() {
+			setBackground(Color.GRAY);
+			ImageIcon leftIcon = new ImageIcon("images/left.png"); // 왼쪽 화살표 이미지 로딩
+			ImageIcon rightIcon = new ImageIcon("images/right.png"); // 오른쪽 화살표 이미지 로딩
+			JButton leftBtn = new JButton(leftIcon); // 왼쪽 버튼 생성
+			JButton rightBtn = new JButton(rightIcon); // 오른쪽 버튼 생성
+			
+			add(leftBtn);	
+			add(rightBtn);
+			
+			// 왼쪽 화살표 버튼에 Action 리스너 달기
+			leftBtn.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					currentId --; // 이미지 번호 감소. 이전 이미지
+					currentId += images.length;	// currentId가 음수가 될 수 있기 때문에 4를 더함
+					currentId %= images.length; // 4 가 넘는 것을 막기 위해 이미지 개수로 나머지 구함
+					imageLabel.setIcon(images[currentId]); // 이미지 레이블에 이미지 변경
+				}
+			});
+			
+			// 오른쪽 화살표 버튼에 Action 리스너 달기
+			rightBtn.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					currentId ++; // 이미지 번호 증가. 다음 이미지
+					currentId %= images.length; // 4 가 넘는 것을 막기 위해 이미지 개수로 나머지 구함 
+					imageLabel.setIcon(images[currentId]); // 이미지 레이블에 이미지 변경
+				}
+			});
+		}
+	}
+	
+	public static void main(String [] args) {
+		new ButtonAndImageLabelFrame();
+	}
+} 
